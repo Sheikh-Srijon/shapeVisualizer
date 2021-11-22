@@ -4,40 +4,31 @@ import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.modul
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module';
 
 function main(coordinateMap, facesArray) {
-    //setup 
-    let scene = new THREE.Scene();
-    //set the camera 
-    let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 0, 10);
-    //set the render to display scene on 2D screen
-    let renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement); //append the canvas to HTML DOM
-
-    let controls = new OrbitControls(camera, renderer.domElement);
-
-    //draw the geometry 
-    // making of a new geometry 
-    const material = new THREE.MeshNormalMaterial()
+    // const material = new THREE.MeshNormalMaterial()
     // const material = new THREE.MeshBasicMaterial({ color: "blue" });
+    let material = new THREE.MeshBasicMaterial({
+        color: "blue",
+        wireframe: true
+    });
     let geometry = new THREE.BufferGeometry()
 
     let points = []
-    getAllPoints(points, coordinateMap,facesArray)
+    getAllPoints(points, coordinateMap, facesArray)
     geometry.setFromPoints(points)
     geometry.computeVertexNormals()
 
+
     const mesh = new THREE.Mesh(geometry, material);
+    mesh.geometry.computeBoundingBox();
+
+    // const box = new THREE.Box3();
+
+
+
+
     scene.add(mesh)
-    //GUI
-    let data = { x: 1 }
-    const gui = new GUI();
-    gui.add(data, "x", -5, -1, 0.01).onChange(() => {
-        geometry.attributes.position.array[3] = data.x
-        geometry.attributes.position.needsUpdate = true
-    }
-    )
-    gui.open();
+    // box.copy( mesh.geometry.boundingBox ).applyMatrix4( mesh.matrixWorld );
+
 
     var animate = function () {
         requestAnimationFrame(animate);
@@ -47,8 +38,22 @@ function main(coordinateMap, facesArray) {
     };
 
     function render() {
+       
         renderer.render(scene, camera);
     }
+
+    function resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+          renderer.setSize(width, height, false);
+        }
+        return needResize;
+      }
+
+
 
     animate();
 
@@ -77,7 +82,7 @@ function readFile() {
                 reject('reader error')
             }
             reader.readAsText(fileSelector.files[0])
-        }, false)
+        })
 
 
     });
@@ -140,12 +145,30 @@ function getAllPoints(points, coordinateMap, facesArray) {
 
     }
 }
+//setup 
+var scene = new THREE.Scene();
+//set the camera 
+var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 10);
+//set the render to display scene on 2D screen
+var renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement); //append the canvas to HTML DOM
 
+var controls = new OrbitControls(camera, renderer.domElement);
+
+let clearButton = document.getElementById('clearCanvas')
+clearButton.onclick = () => {
+    renderer.clear()
+    location.reload();
+    return false;
+}
 var promise = readFile()
 var dataArray = []
 //handle promise return
 promise.then((res => {
     dataArray = res
+    renderer.clear()
     //obtain coordinateMap and faces array to draw the shape 
     let [coordinateMap, facesArray] = processData(dataArray)
     main(coordinateMap, facesArray)
