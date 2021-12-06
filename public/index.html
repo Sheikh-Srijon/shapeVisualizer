@@ -11,16 +11,15 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
-<body class="flex-container">
+<body>
     <div class="container">
         <div class="topBar">
             <p>Please upload the text file you want to run.</p>
             <div> <input type="file" class="btn btn-primary btn-sm" id="fileSelector" multiple></div>
            <div><button type="button" class="btn btn-primary btn-sm" id="clearCanvas">CLEAR CANVAS</button></div>
-            
-
         </div>
         <div class="mainBody">
+            <canvas id="c"></canvas>
             <script type="module" src="/main.js"></script>
         </div>
          
