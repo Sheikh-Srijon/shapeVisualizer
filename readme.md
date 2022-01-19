@@ -17,4 +17,3 @@ Given input coordinates in a text file according to the specifications format, t
 ### What shapes can be run by default?
 For convenience, this program comes with data.txt, pyramid.txt and plane.txt in /public directory. You can upload those text files. 
 --- 
-Thank you! Usually, open sourcers will ask for coffee as gratitude but I would love to intern at Neocis instead ;) 
