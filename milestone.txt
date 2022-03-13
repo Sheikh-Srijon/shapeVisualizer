@@ -1,0 +1,45 @@
+CS193X Final Project Milestone
+=============================
+
+Project Name: Shape Visualizer
+Your Name: Sheikh Srijon
+Your SUNetID: srijon
+
+Overview
+--------
+<TODO: Let us know how things are going. What have you explored, looked into, worked on, and tried so far? What do you have left to do? Are you running into any particular difficulties or blockers?>
+
+- I have implemented a way to draw shapes using triangulation. It draws pyramids, triangles etc correctly. The user needs to input a list of variables using a textFile and the code draws it. 
+
+- The UI is pretty bad now. I will standardize it + make the inputing of points dynamic -- the user should be able to input it to the app (event listeners should be helpful here). 
+
+- So, at this moment, I think I have a fair amount of JS going into the actual drawing of the 3D shapes. I am using three.js library for it. But the app does not look super pretty. 
+
+Project Changes
+---------------
+Nothing much has changed from the conception. 
+
+Follow-up
+---------
+1. Can I use bootstrap or some other way to make navbar, side bars etc fast? 
+2. Can I use template HTML's from the web (there are many free HTML/CSS design templates)? 
+3. How is the project graded? Is it just meeting the spec checkboxes or are we graded for "how pretty does it look?" 
+
+API
+---
+1. Get Random shape returns a random object from the mongoDB storage
+2. Authentication using Google OAuth 
+
+External libraries and code
+---------------------------
+1. Three.js
+2. MongoDB 
+3. JWT etc 
+
+Collaboration and resources
+---------------------------
+Honestly, I read the documentation of three.js and called the appropriate library functions itself. Uploaded my code in paperless. Any advice on the class architecture will be helpful. 
+
+Anything else?
+-------------
+Doing okay. Was a tough quarter with a bike accident but I think I have recovered just in time. 

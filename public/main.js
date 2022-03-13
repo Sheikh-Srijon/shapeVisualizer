@@ -2,16 +2,18 @@ import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
 import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js';
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module';
-
+/**
+ * @main function drawns the geometric shape from coordinates and faces passed onto it
+ * @param {*} coordinateMap coordinates of vertices mapped by vertex-id to geometric coordinates
+ * @param {*} facesArray array with each entr representing a face of a triangle
+ */
 function main(coordinateMap, facesArray) {
     // const material = new THREE.MeshNormalMaterial()
-    // const material = new THREE.MeshBasicMaterial({ color: "blue" });
     let material = new THREE.MeshBasicMaterial({
         color: "blue",
         wireframe: true
     });
-    let geometry = new THREE.BufferGeometry()
-
+    let geometry = new THREE.BufferGeometry();//create a shape from points given
     let points = []
     getAllPoints(points, coordinateMap, facesArray)
     geometry.setFromPoints(points)
@@ -20,16 +22,11 @@ function main(coordinateMap, facesArray) {
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.geometry.computeBoundingBox();
-
-    // const box = new THREE.Box3();
-
-
-
-
     scene.add(mesh)
-    // box.copy( mesh.geometry.boundingBox ).applyMatrix4( mesh.matrixWorld );
 
-
+    /**
+     * @animate will render the shape 
+     */
     var animate = function () {
         requestAnimationFrame(animate);
         controls.update();
@@ -37,27 +34,16 @@ function main(coordinateMap, facesArray) {
         // stats.update();
     };
 
-    function render() {
-       
+    function render(time) {
+
         renderer.render(scene, camera);
+        // animate()
     }
 
-    function resizeRendererToDisplaySize(renderer) {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const needResize = canvas.width !== width || canvas.height !== height;
-        if (needResize) {
-          renderer.setSize(width, height, false);
-        }
-        return needResize;
-      }
-
-
-
     animate();
-
 }
+
+
 //* handle file uploads
 
 //@functin readFile returns a promise after user uploads a file 
@@ -88,7 +74,11 @@ function readFile() {
     });
 
 }
-
+/***
+ * @processData {param} dataArray is an array of with data from the input textfile
+ *              This function computes the vertices and faces that are translated into points 
+ *              for Buffer Geometry function to use
+ */
 function processData(dataArray) {
     //create vertices {1 -> coordinates}
     let metaData = dataArray[0].split(',')
@@ -116,11 +106,18 @@ function processData(dataArray) {
     }
     return [coordinateMap, facesArray]
 }
+/***
+ * @getVector returns vectors from numerical coordinates 
+ */
 
 function getVector(coordinates) {
     return new THREE.Vector3(...coordinates)
 }
-
+/**
+ * @drawOneFace takes in an array to populate and three coordinates to draw a face of the 
+ * triangle. 
+ * Separated for readability
+ */
 function drawOneFace(points, p1, p2, p3) {
     let v1 = getVector(p1)
     let v2 = getVector(p2)
@@ -128,7 +125,13 @@ function drawOneFace(points, p1, p2, p3) {
     points.push(v1, v2, v3)
 
 }
-
+/**
+ * 
+ * @param {*} points 
+ * @param {*} coordinateMap maps vertexID to geometric coordinates
+ * @param {*} facesArray is an array where each entry consists of vertices IDs that make 
+ * up one triangular face
+ */
 function getAllPoints(points, coordinateMap, facesArray) {
     //iterate through all faces to be drawn
     for (let i = 0; i < facesArray.length; i++) {
@@ -151,7 +154,8 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(0, 0, 10);
 //set the render to display scene on 2D screen
-var renderer = new THREE.WebGLRenderer({ alpha: true });
+var canvas = document.querySelector('#c')
+var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement); //append the canvas to HTML DOM
 
